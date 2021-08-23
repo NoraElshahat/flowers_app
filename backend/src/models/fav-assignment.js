@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const FavouriteAssignment = new mongoose.Schema({
+const FavouriteAssignmentSchema = new mongoose.Schema({
   user: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -16,6 +16,6 @@ const FavouriteAssignment = new mongoose.Schema({
 
 const FavouriteAssignment = mongoose.model(
   'FavouriteAssignment',
-  FavouriteAssignment
+  FavouriteAssignmentSchema
 );
 module.exports = FavouriteAssignment;

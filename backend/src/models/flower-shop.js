@@ -1,6 +1,6 @@
 const mongoos = require('mongoose');
 
-const FlowerShop = new mongoos.Schema({
+const FlowerShopSchema = new mongoos.Schema({
   name: {
     type: String,
     required: [true, 'Shop Name is Required'],
@@ -19,5 +19,5 @@ const FlowerShop = new mongoos.Schema({
   },
 });
 
-const FlowerShop = mongoos.model('FlowerShop', FlowerShop);
+const FlowerShop = mongoos.model('FlowerShop', FlowerShopSchema);
 module.exports = FlowerShop;
