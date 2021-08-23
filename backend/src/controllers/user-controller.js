@@ -22,8 +22,24 @@ async function createUser(req, res, next) {
       }
       return res
         .status(200)
-        .json({ message: 'user created successfully', data: newUser });
+        .send({ message: 'user created successfully', data: newUser });
     });
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function loginUser(req, res, next) {
+  try {
+    const { body } = req;
+    const userFound = await User.findByMailAndPassword(
+      body.email,
+      body.password
+    );
+
+    return res
+      .status(200)
+      .send({ message: 'user logined successfully', data: userFound });
   } catch (error) {
     next(error);
   }
@@ -31,4 +47,5 @@ async function createUser(req, res, next) {
 
 module.exports = {
   createUser,
+  loginUser,
 };
