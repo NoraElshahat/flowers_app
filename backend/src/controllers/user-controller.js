@@ -12,6 +12,9 @@ async function createUser(req, res, next) {
       throw new ErrorHandler(400, 'Password is Required');
     }
     const newUser = await new User(body);
+    if (req.file) {
+      newUser.profilePicture = req.file.filename;
+    }
     await newUser.save(function (error) {
       if (error) {
         if (error.code === 11000 && error.name === 'MongoError') {
