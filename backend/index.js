@@ -3,7 +3,6 @@ require('./src/db/db');
 const { handleError } = require('./src/helpers/error');
 const PORT = 5000;
 const app = express();
-const multer = require('multer');
 const userRouter = require('./src/routers/user-router');
 const bodyParser = require('body-parser');
 
@@ -23,5 +22,5 @@ app.use((err, req, res, next) => {
 
 //server listenning
 app.listen(PORT, () => {
-  console.log(`your server is running on port ${PORT}`, __dirname);
+  console.log(`your server is running on port ${PORT}`);
 });
