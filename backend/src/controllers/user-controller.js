@@ -1,32 +1,25 @@
 const User = require('../models/user');
 const { ErrorHandler } = require('../helpers/error');
 const bcrypt = require('bcryptjs');
-
+const Joi = require('joi');
+const UserSchema = require('../models/user');
 //signup user
 async function createUser(req, res, next) {
-  try {
-    const { body } = req;
-    if (body.email == '' || !('email' in body)) {
-      throw new ErrorHandler(400, 'Email is Required');
-    }
-    if (body.password == '' || !('password' in body)) {
-      throw new ErrorHandler(400, 'Password is Required');
-    }
-    const exist = await findByEmail(body.email);
-    if (exist) {
-      throw new ErrorHandler(400, 'already exist');
-    }
-    const newUser = await new User(body);
-    if (req.file) {
-      newUser.profilePicture = `http://localhost:5000/${req.file.path}`;
-    }
-    await newUser.save();
-
-    return res
-      .status(200)
-      .send({ message: 'user created successfully', data: newUser });
-  } catch (error) {
-    next(error);
+  const data = req.body;
+  const validation = UserSchema.validate(data);
+  if (!validation.error) {
+    res.status(200).send(validation.value);
+  } else {
+    // const exist = await findByEmail(data.email);
+    // if (exist) {
+    //   throw new ErrorHandler(400, 'already exist');
+    // }
+    // const newUser = await new User(data);
+    // if (req.file) {
+    //   newUser.profilePicture = `http://localhost:5000/${req.file.path}`;
+    // }
+    // await newUser.save();
+    res.status(400).send(validation.error.details[0].message);
   }
 }
 
@@ -44,7 +37,8 @@ async function loginUser(req, res, next) {
 }
 
 async function findByEmail(email) {
-  const found = await User.findOne({ email });
+  console.log(email);
+  const found = await User.find({ email });
   if (found) {
     return true;
   }
