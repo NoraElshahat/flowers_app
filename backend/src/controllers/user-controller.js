@@ -1,6 +1,8 @@
 const User = require('../models/user');
 const { ErrorHandler } = require('../helpers/error');
 const bcrypt = require('bcryptjs');
+const Redis = require('redis');
+const redisClient = Redis.createClient();
 
 //signup user
 async function createUser(req, res, next) {
@@ -28,7 +30,7 @@ async function loginUser(req, res, next) {
   try {
     const { body } = req;
     const userFound = await findByMailAndPassword(body.email, body.password);
-
+    redisClient.set('user', JSON.stringify(userFound));
     return res
       .status(200)
       .send({ message: 'user logined successfully', data: userFound });
@@ -60,7 +62,17 @@ findByMailAndPassword = async (email, password) => {
   return user;
 };
 
+// get all users
+async function getUsers(req, res) {
+  const users = await User.find({});
+  if (users.length != 0) {
+    redisClient.set('users', JSON.stringify(users));
+    return res.status(200).send({ users });
+  }
+}
+
 module.exports = {
   createUser,
   loginUser,
+  getUsers,
 };
