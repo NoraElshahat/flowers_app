@@ -1,24 +1,25 @@
 const User = require('../models/user');
 const { ErrorHandler } = require('../helpers/error');
 const bcrypt = require('bcryptjs');
-const Joi = require('joi');
-const UserSchema = require('../models/user');
+
 //signup user
 async function createUser(req, res, next) {
   const data = req.body;
-  const validation = UserSchema.validate(data);
+  const user = new User(data);
+  const validation = user.joiValidate(data);
   if (!validation.error) {
+    const exist = await findByEmail(user.email);
+    if (exist) {
+      return res.status(400).send({
+        message: 'alredy exist , please try to enter new email',
+      });
+    }
+    if (req.file) {
+      user.profilePicture = `http://localhost:5000/${req.file.path}`;
+    }
+    await user.save();
     res.status(200).send(validation.value);
   } else {
-    // const exist = await findByEmail(data.email);
-    // if (exist) {
-    //   throw new ErrorHandler(400, 'already exist');
-    // }
-    // const newUser = await new User(data);
-    // if (req.file) {
-    //   newUser.profilePicture = `http://localhost:5000/${req.file.path}`;
-    // }
-    // await newUser.save();
     res.status(400).send(validation.error.details[0].message);
   }
 }
@@ -37,9 +38,8 @@ async function loginUser(req, res, next) {
 }
 
 async function findByEmail(email) {
-  console.log(email);
   const found = await User.find({ email });
-  if (found) {
+  if (found.length != 0) {
     return true;
   }
   return false;
