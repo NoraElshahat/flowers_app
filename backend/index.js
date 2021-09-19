@@ -4,9 +4,9 @@ const { handleError } = require('./src/helpers/error');
 const PORT = 5000;
 const app = express();
 const userRouter = require('./src/routers/user-router');
+const shopRouter = require('./src/routers/shop-router');
 const bodyParser = require('body-parser');
 
-// app.use(express.static(__dirname + '/public'));
 app.use('/uploads', express.static('uploads'));
 
 //to convert body of request to json
@@ -14,6 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use('/user', userRouter);
+app.use('/shop', shopRouter);
 
 // central handle error
 app.use((err, req, res, next) => {

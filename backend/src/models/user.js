@@ -41,16 +41,5 @@ UserSchema.pre('save', async function (next) {
   next();
 });
 
-// const validateRequest = (user) => {
-//   const validationSchema = Joi.object().keys({
-//     name: Joi.string().required(),
-//     email: Joi.string().email().required(),
-//     password: Joi.string().required(),
-//     profilePicture: Joi.string(),
-//   });
-
-//   return validationSchema.validate(user);
-// };
-
 const User = mongoose.model('User', UserSchema);
 module.exports = User;
