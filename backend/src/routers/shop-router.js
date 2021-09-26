@@ -4,6 +4,8 @@ const {
   addNewShop,
   getShop,
   updateShop,
+  getShopWithLimits,
+  nearestShop,
 } = require('../controllers/shop-controller');
 
 const multer = require('multer');
@@ -28,4 +30,10 @@ router.get('/find-shop/:id', getShop);
 
 // update shop
 router.patch('/shop-details/:id', updateShop);
+
+// limit number of shop
+router.get('/shops/:num/:lim', getShopWithLimits);
+
+// nearest location
+router.get('/find-shop/:lat/:lan', nearestShop);
 module.exports = router;

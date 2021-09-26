@@ -46,4 +46,32 @@ const updateShop = async (req, res) => {
   }
 };
 
-module.exports = { addNewShop, getShop, updateShop };
+// get data of shop paginated
+const getShopWithLimits = async (req, res) => {
+  const pageOptions = {
+    pageNumber: parseInt(req.params.num),
+    limit: parseInt(req.params.lim),
+  };
+  const fetchedShop = await FlowerShop.find()
+    .skip(pageOptions.limit * pageOptions.pageNumber)
+    .limit(pageOptions.limit);
+  redisClient.set('paginated_shop', JSON.stringify(fetchedShop));
+  if (fetchedShop) {
+    return res.status(200).send({ data: fetchedShop });
+  } else {
+    return res.status(400).send({ message: 'No Data Available' });
+  }
+};
+
+// find nearest location of shop
+const nearestShop = async (req, res) => {
+  const { lan, lat } = req.params;
+  console.log(lan, lat, 'nearset');
+};
+module.exports = {
+  addNewShop,
+  getShop,
+  updateShop,
+  getShopWithLimits,
+  nearestShop,
+};
