@@ -35,5 +35,5 @@ router.patch('/shop-details/:id', updateShop);
 router.get('/shops/:num/:lim', getShopWithLimits);
 
 // nearest location
-router.get('/find-shop/:lat/:lan', nearestShop);
+router.get('/find-location/:lat1/:lon1/:lon2/:lat2', nearestShop);
 module.exports = router;

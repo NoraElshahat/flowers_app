@@ -56,7 +56,7 @@ const getShopWithLimits = async (req, res) => {
     .skip(pageOptions.limit * pageOptions.pageNumber)
     .limit(pageOptions.limit);
   redisClient.set('paginated_shop', JSON.stringify(fetchedShop));
-  if (fetchedShop) {
+  if (fetchedShop.length != 0) {
     return res.status(200).send({ data: fetchedShop });
   } else {
     return res.status(400).send({ message: 'No Data Available' });
@@ -65,8 +65,31 @@ const getShopWithLimits = async (req, res) => {
 
 // find nearest location of shop
 const nearestShop = async (req, res) => {
-  const { lan, lat } = req.params;
-  console.log(lan, lat, 'nearset');
+  const { lon1, lat1, lon2, lat2 } = req.params;
+  if (lat1 == lat2 && lon1 == lon2) {
+    return 0;
+  } else {
+    var radlat1 = (Math.PI * lat1) / 180;
+    var radlat2 = (Math.PI * lat2) / 180;
+    var theta = lon1 - lon2;
+    var radtheta = (Math.PI * theta) / 180;
+
+    var dist =
+      Math.sin(radlat1) * Math.sin(radlat2) +
+      Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+    if (dist > 1) {
+      dist = 1;
+    }
+    dist = Math.acos(dist);
+    dist = (dist * 180) / Math.PI;
+
+    dist = dist * 60 * 1.1515;
+
+    // distance with kilometers
+    dist = dist * 1.609344;
+
+    return res.status(200).send({ distance: dist });
+  }
 };
 module.exports = {
   addNewShop,
