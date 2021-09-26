@@ -5,6 +5,7 @@ const PORT = 5000;
 const app = express();
 const userRouter = require('./src/routers/user-router');
 const shopRouter = require('./src/routers/shop-router');
+const flowersRouter = require('./src/routers/flowers-router');
 const bodyParser = require('body-parser');
 
 app.use('/uploads', express.static('uploads'));
@@ -15,6 +16,7 @@ app.use(bodyParser.json());
 
 app.use('/user', userRouter);
 app.use('/shop', shopRouter);
+app.use('/flower', flowersRouter);
 
 // central handle error
 app.use((err, req, res, next) => {
