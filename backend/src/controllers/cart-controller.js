@@ -23,7 +23,6 @@ const getCartDetails = async (req, res) => {
     findDetails.map((item) => {
       price += item.flowers[0].price;
     });
-
     redisClient.set('user-cart-details', JSON.stringify(findDetails));
     return res.status(200).send({ details: findDetails, totalPrice: price });
   } else {
