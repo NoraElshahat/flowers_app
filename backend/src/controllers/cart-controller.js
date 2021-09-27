@@ -18,7 +18,10 @@ const addToCart = async (req, res) => {
 const getCartDetails = async (req, res) => {
   const id = req.params.id;
   var price = 0;
-  const findDetails = await Cart.find({ user: id }).populate('flowers');
+  const findDetails = await Cart.find(
+    { user: id },
+    { user: 0, _id: 0 }
+  ).populate('flowers');
   if (findDetails.length != 0) {
     findDetails.map((item) => {
       price += item.flowers[0].price;
