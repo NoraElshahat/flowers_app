@@ -65,9 +65,24 @@ const updateFlower = async (req, res) => {
   }
 };
 
+// get flower under this shop
+const getShopFlower = async (req, res) => {
+  const id = req.params.id;
+  const findFlowers = await Flowers.find({ shop: id });
+  if (findFlowers.length != 0) {
+    redisClient.set('flower-under-shop', JSON.stringify(findFlowers));
+    return res.status(200).send({ flowerUnderShop: findFlowers });
+  } else {
+    return res
+      .status(400)
+      .send({ message: 'No Flower available under this shop' });
+  }
+};
+
 module.exports = {
   addFlower,
   flowers,
   getFlower,
   updateFlower,
+  getShopFlower,
 };

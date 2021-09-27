@@ -6,6 +6,7 @@ const {
   flowers,
   getFlower,
   updateFlower,
+  getShopFlower,
 } = require('../controllers/flowers-controller');
 const multer = require('multer');
 
@@ -32,5 +33,8 @@ router.get('/flower/:id', getFlower);
 
 // update one flower
 router.patch('/update-flower/:id', updateFlower);
+
+// get flowers under shop
+router.get('/shop/:id/flowers', getShopFlower);
 
 module.exports = router;
